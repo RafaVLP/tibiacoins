@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Lucro - Tibia Farm</title>
+    <style>
+        body {
+            font-family: "Verdana", sans-serif;
+            background-color: #1e1e1e;
+            color: #fff;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #c69b34; /* Dourado Tibia */
+            margin-bottom: 10px;
+        }
+        .container {
+            background: #2b2b2b;
+            border: 2px solid #555;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            margin: 0 auto;
+            max-width: 400px;
+        }
+        label {
+            display: block;
+            margin: 10px auto 5px;
+            font-weight: bold;
+            color: #a3ff73; /* Verde Tibia */
+        }
+        input {
+            display: block;
+            width: 90%;
+            margin: 0 auto 15px;
+            padding: 8px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background-color: #333;
+            color: #fff;
+        }
+        input:focus {
+            outline: none;
+            border-color: #a3ff73;
+        }
+        button {
+            background-color: #c69b34;
+            color: #1e1e1e;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #a3842b;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #444;
+            border: 1px solid #555;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calculadora de Lucro - Tibia</h1>
+    <div class="container">
+        <label for="goldPorHora">Farm de Gold Coins por Hora (em kk, ex: 4.5):</label>
+        <input type="number" step="0.01" id="goldPorHora" placeholder="Insira o valor em kk">
+
+        <label for="valorRubiniGold">Valor de 1 Rubini Coin em Gold Coins (ex: 43000):</label>
+        <input type="number" id="valorRubiniGold" placeholder="Insira o valor da Rubini Coin">
+
+        <label for="valor25Rubini">Valor de 25 Rubini Coins em reais (ex: 2.08(dracoins)):</label>
+        <input type="number" step="0.01" id="valor25Rubini" placeholder="Insira o valor do revendedor">
+
+        <label for="horasPorDia">Horas jogadas por Dia (ex: 6):</label>
+        <input type="number" id="horasPorDia" placeholder="Insira as horas por dia">
+
+        <button onclick="calcularLucro()">Calcular</button>
+
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function calcularLucro() {
+            const goldPorHoraKK = parseFloat(document.getElementById("goldPorHora").value);
+            const valorRubiniGold = parseFloat(document.getElementById("valorRubiniGold").value);
+            const valor25Rubini = parseFloat(document.getElementById("valor25Rubini").value);
+            const horasPorDia = parseFloat(document.getElementById("horasPorDia").value);
+
+            if (isNaN(goldPorHoraKK) || isNaN(valorRubiniGold) || isNaN(valor25Rubini) || isNaN(horasPorDia)) {
+                document.getElementById("result").innerHTML = "Por favor, insira valores válidos!";
+                return;
+            }
+
+            // Converter farm de gold coins em milhões
+            const goldPorHora = goldPorHoraKK * 1000000;
+
+            // Cálculos
+            const rubiniPorGold = goldPorHora / valorRubiniGold; // Rubini Coins por hora
+            const valor1Rubini = valor25Rubini / 25; // Valor de 1 Rubini Coin em reais
+            const ganhoPorHora = rubiniPorGold * valor1Rubini;
+
+            const ganhoPorDia = ganhoPorHora * horasPorDia;
+            const ganhoPorSemana = ganhoPorDia * 7; // 7 dias
+            const ganhoPorMes = ganhoPorDia * 30;   // 30 dias
+
+            // Exibir resultados formatados
+            document.getElementById("result").innerHTML = `
+                <p>Lucro por Hora: <strong>R$ ${ganhoPorHora.toFixed(2)}</strong></p>
+                <p>Lucro por Dia (${horasPorDia} horas): <strong>R$ ${ganhoPorDia.toFixed(2)}</strong></p>
+                <p>Lucro por Semana: <strong>R$ ${ganhoPorSemana.toFixed(2)}</strong></p>
+                <p>Lucro por Mês: <strong>R$ ${ganhoPorMes.toFixed(2)}</strong></p>
+            `;
+        }
+    </script>
+</body>
+</html>
